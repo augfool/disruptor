@@ -2,6 +2,9 @@
 
 A High Performance Inter-Thread Messaging Library
 
+学习版本 git checkout 3.4.2-study
+
+
 ## Maintainer
 
 [Michael Barker](https://github.com/mikeb01)
