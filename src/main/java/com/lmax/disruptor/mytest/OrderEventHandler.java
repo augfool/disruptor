@@ -1,0 +1,22 @@
+/*
+ * Baijiahulian.com Inc. Copyright (c) 2014-2019 All Rights Reserved.
+ */
+
+package com.lmax.disruptor.mytest;
+
+import com.lmax.disruptor.EventHandler;
+
+/**
+ * @author study
+ * @date 2019-09-07
+ * 具体的消费者
+ */
+public class OrderEventHandler implements EventHandler<OrderEvent> {
+
+    @Override
+    public void onEvent(OrderEvent event, long sequence, boolean endOfBatch) throws Exception {
+
+        System.out.println("消费者：" + event.getValue());
+
+    }
+}
