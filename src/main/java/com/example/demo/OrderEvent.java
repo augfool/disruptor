@@ -2,7 +2,7 @@
  * Baijiahulian.com Inc. Copyright (c) 2014-2019 All Rights Reserved.
  */
 
-package com.lmax.disruptor.mytest;
+package com.example.demo;
 
 /**
  * @author study
