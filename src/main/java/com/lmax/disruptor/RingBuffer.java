@@ -76,13 +76,17 @@ abstract class RingBufferFields<E> extends RingBufferPad
 
         this.indexMask = bufferSize - 1;
         this.entries = new Object[sequencer.getBufferSize() + 2 * BUFFER_PAD];
+
+        // 内存预加载
         fill(eventFactory);
     }
 
-    private void fill(EventFactory<E> eventFactory)
-    {
-        for (int i = 0; i < bufferSize; i++)
-        {
+    /**
+     * 这个方法就是 内存预加载机制的核心实现
+     * @param eventFactory
+     */
+    private void fill(EventFactory<E> eventFactory) {
+        for (int i = 0; i < bufferSize; i++) {
             entries[BUFFER_PAD + i] = eventFactory.newInstance();
         }
     }

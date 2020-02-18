@@ -19,7 +19,10 @@ import sun.misc.Unsafe;
 
 import com.lmax.disruptor.util.Util;
 
-
+/**
+ * study 消除伪共享，一个 long 占 8个字节
+ * 我左边画 7 * 8字节 = 56 个字节，我右边画上 56 个字节，当缓存行是64字节时，我怎么地也不会和其他 value 在一个缓存行中。
+ */
 class LhsPadding
 {
     protected long p1, p2, p3, p4, p5, p6, p7;
@@ -36,6 +39,11 @@ class RhsPadding extends Value
 }
 
 /**
+ *
+ * 作用：
+ * 1. sequence 可以看成是一个AtomicLong用于标识进度
+ * 2. 防止不同sequence之间CPU缓存伪共享（False Sharing）的问题
+ *
  * <p>Concurrent sequence class used for tracking the progress of
  * the ring buffer and event processors.  Support a number
  * of concurrent operations including CAS and order writes.

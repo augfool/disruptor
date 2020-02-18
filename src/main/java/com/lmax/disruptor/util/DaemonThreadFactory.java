@@ -22,6 +22,9 @@ import java.util.concurrent.ThreadFactory;
  */
 public enum DaemonThreadFactory implements ThreadFactory
 {
+    /**
+     * wtt 实例
+     */
     INSTANCE;
 
     @Override
@@ -30,5 +33,17 @@ public enum DaemonThreadFactory implements ThreadFactory
         Thread t = new Thread(r);
         t.setDaemon(true);
         return t;
+    }
+
+    /**
+     * wtt 例子
+     * @param args
+     */
+    public static void main(String[] args) {
+        Runnable runnable = () -> {
+            System.out.println("hello world");
+        };
+        Thread t = INSTANCE.newThread(runnable);
+        t.start();
     }
 }

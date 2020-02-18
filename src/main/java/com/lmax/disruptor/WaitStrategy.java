@@ -15,8 +15,9 @@
  */
 package com.lmax.disruptor;
 
-
 /**
+ * 消费者将如何等待生产者将Event置入Disruptor
+ *
  * Strategy employed for making {@link EventProcessor}s wait on a cursor {@link Sequence}.
  */
 public interface WaitStrategy

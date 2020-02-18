@@ -18,6 +18,9 @@ package com.lmax.disruptor;
 import java.util.concurrent.locks.LockSupport;
 
 /**
+ * 无锁
+ * 性能表现跟BlockingWaitStrategy差不多，对CPU的消耗也类似，但其对生产者线程的影响最小，适合用于异步日志类似的场景。
+ *
  * Sleeping strategy that initially spins, then uses a Thread.yield(), and
  * eventually sleep (<code>LockSupport.parkNanos(n)</code>) for the minimum
  * number of nanos the OS and JVM will allow while the
@@ -73,6 +76,13 @@ public final class SleepingWaitStrategy implements WaitStrategy
     {
     }
 
+    /**
+     * 做空的运转
+     * @param barrier
+     * @param counter
+     * @return
+     * @throws AlertException
+     */
     private int applyWaitMethod(final SequenceBarrier barrier, int counter)
         throws AlertException
     {

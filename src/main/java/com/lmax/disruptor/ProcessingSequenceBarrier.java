@@ -17,6 +17,7 @@ package com.lmax.disruptor;
 
 
 /**
+ * 序号栅栏的协调者
  * {@link SequenceBarrier} handed out for gating {@link EventProcessor}s on a cursor sequence and optional dependent {@link EventProcessor}(s),
  * using the given WaitStrategy.
  */
@@ -32,6 +33,7 @@ final class ProcessingSequenceBarrier implements SequenceBarrier
         final Sequencer sequencer,
         final WaitStrategy waitStrategy,
         final Sequence cursorSequence,
+        // 消费者序号
         final Sequence[] dependentSequences)
     {
         this.sequencer = sequencer;
@@ -53,6 +55,7 @@ final class ProcessingSequenceBarrier implements SequenceBarrier
     {
         checkAlert();
 
+        // sequence：下一个消费者想要的序号
         long availableSequence = waitStrategy.waitFor(sequence, cursorSequence, dependentSequence, this);
 
         if (availableSequence < sequence)

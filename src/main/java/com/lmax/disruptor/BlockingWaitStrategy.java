@@ -22,6 +22,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.lmax.disruptor.util.ThreadHints;
 
 /**
+ * 加锁
+ * 最低效的策略，但其对CPU的消耗最小并且在各种不同部署环境中能提供更加一致的性能表现。
+ *
  * Blocking strategy that uses a lock and condition variable for {@link EventProcessor}s waiting on a barrier.
  * <p>
  * This strategy can be used when throughput and low-latency are not as important as CPU resource.
@@ -29,6 +32,8 @@ import com.lmax.disruptor.util.ThreadHints;
 public final class BlockingWaitStrategy implements WaitStrategy
 {
     private final Lock lock = new ReentrantLock();
+
+    // 为了多线程等待/唤醒
     private final Condition processorNotifyCondition = lock.newCondition();
 
     @Override
@@ -36,6 +41,8 @@ public final class BlockingWaitStrategy implements WaitStrategy
         throws AlertException, InterruptedException
     {
         long availableSequence;
+
+        // 生产者的序号 小于 消费者的序号，我就在者等着
         if (cursorSequence.get() < sequence)
         {
             lock.lock();
@@ -44,6 +51,7 @@ public final class BlockingWaitStrategy implements WaitStrategy
                 while (cursorSequence.get() < sequence)
                 {
                     barrier.checkAlert();
+                    // 阻塞
                     processorNotifyCondition.await();
                 }
             }
@@ -68,6 +76,7 @@ public final class BlockingWaitStrategy implements WaitStrategy
         lock.lock();
         try
         {
+            // 发起唤醒
             processorNotifyCondition.signalAll();
         }
         finally

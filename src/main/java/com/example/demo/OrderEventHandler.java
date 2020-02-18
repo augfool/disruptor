@@ -7,9 +7,12 @@ package com.example.demo;
 import com.lmax.disruptor.EventHandler;
 
 /**
+ *
+ * 具体的消费者（数据监听）
+ * 事件驱动模式
+ *
  * @author study
  * @date 2019-09-07
- * 具体的消费者
  */
 public class OrderEventHandler implements EventHandler<OrderEvent> {
 

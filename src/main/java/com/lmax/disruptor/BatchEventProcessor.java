@@ -19,6 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
+ * 核心
+ *
  * Convenience class for handling the batching semantics of consuming entries from a {@link RingBuffer}
  * and delegating the available events to an {@link EventHandler}.
  * <p>
@@ -27,9 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @param <T> event implementation storing the data for sharing during exchange or parallel coordination of an event.
  */
-public final class BatchEventProcessor<T>
-    implements EventProcessor
-{
+public final class BatchEventProcessor<T> implements EventProcessor {
+
     private static final int IDLE = 0;
     private static final int HALTED = IDLE + 1;
     private static final int RUNNING = HALTED + 1;
@@ -37,9 +38,25 @@ public final class BatchEventProcessor<T>
     private final AtomicInteger running = new AtomicInteger(IDLE);
     private ExceptionHandler<? super T> exceptionHandler = new FatalExceptionHandler();
     private final DataProvider<T> dataProvider;
+
+    /**
+     * 序号栅栏，维护生产和消费进度的协调类
+     */
     private final SequenceBarrier sequenceBarrier;
+
+    /**
+     * 消费者接口实现
+     */
     private final EventHandler<? super T> eventHandler;
+
+    /**
+     * ringBuffer有效的最大的序号，即消费者想要的序号。
+     */
     private final Sequence sequence = new Sequence(Sequencer.INITIAL_CURSOR_VALUE);
+
+    /**
+     * 超时的处理
+     */
     private final TimeoutHandler timeoutHandler;
     private final BatchStartAware batchStartAware;
 
@@ -106,6 +123,8 @@ public final class BatchEventProcessor<T>
     }
 
     /**
+     * 最核心的方法，调用 eventHandler
+     *
      * It is ok to have another thread rerun this method after a halt().
      *
      * @throws IllegalStateException if this object instance is already running in a thread
@@ -150,25 +169,34 @@ public final class BatchEventProcessor<T>
     private void processEvents()
     {
         T event = null;
+
+        // 消费者下一个想要的序号，比如10
         long nextSequence = sequence.get() + 1L;
 
+        // 消费者在自旋中一直消费或者等待
         while (true)
         {
             try
             {
+                // 真实可用的序号（生产到的序号），比如想要10，给了13
                 final long availableSequence = sequenceBarrier.waitFor(nextSequence);
                 if (batchStartAware != null)
                 {
                     batchStartAware.onBatchStart(availableSequence - nextSequence + 1);
                 }
 
+                // 10 <= 13，那我就一直循环，把这三条数据处理完后再往下走。
                 while (nextSequence <= availableSequence)
                 {
+                    // 获取数据
                     event = dataProvider.get(nextSequence);
+
+                    // 实际的消费者处理
                     eventHandler.onEvent(event, nextSequence, nextSequence == availableSequence);
                     nextSequence++;
                 }
 
+                // 14
                 sequence.set(availableSequence);
             }
             catch (final TimeoutException e)

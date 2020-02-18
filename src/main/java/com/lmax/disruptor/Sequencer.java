@@ -16,6 +16,10 @@
 package com.lmax.disruptor;
 
 /**
+ *
+ * Sequencer 中包含 sequence，两个重要的实现类 SingleProducerSequencer 和 MultiProducerSequencer
+ * 主要实现生产者和消费者之间快速、正确地传递数据的并发算法。
+ *
  * Coordinates claiming sequences for access to a data structure while tracking dependent {@link Sequence}s
  */
 public interface Sequencer extends Cursored, Sequenced

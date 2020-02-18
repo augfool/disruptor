@@ -17,6 +17,9 @@ package com.lmax.disruptor;
 
 
 /**
+ * 无锁
+ * 性能是最好的，适合用于低延迟的系统。在要求极高性能且事件处理线程数小于CPU逻辑核心数的场景中，推荐使用次策略。
+ *
  * Yielding strategy that uses a Thread.yield() for {@link com.lmax.disruptor.EventProcessor}s waiting on a barrier
  * after an initially spinning.
  * <p>
