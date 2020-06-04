@@ -42,6 +42,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * <p>A DSL-style API for setting up the disruptor pattern around a ring buffer
  * (aka the Builder pattern).</p>
  *
+ * 按照建造者模式设计的 disruptor API
+ *
  * <p>A simple example of setting up the disruptor with two event handlers that
  * must process events in order:</p>
  * <pre>
@@ -123,7 +125,7 @@ public class Disruptor<T>
      * @param eventFactory   the factory to create events in the ring buffer.
      * @param ringBufferSize the size of the ring buffer, must be power of 2.
      * @param threadFactory  a {@link ThreadFactory} to create threads for processors.
-     * @param producerType   the claim strategy to use for the ring buffer.
+     * @param producerType   the claim strategy to use for the ring buffer. 生产策略（单生产者、多生产者）
      * @param waitStrategy   the wait strategy to use for the ring buffer.
      */
     public Disruptor(

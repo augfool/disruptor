@@ -77,13 +77,13 @@ class ConsumerRepository<T> implements Iterable<ConsumerInfo>
 
     public EventProcessor getEventProcessorFor(final EventHandler<T> handler)
     {
-        final EventProcessorInfo<T> eventprocessorInfo = getEventProcessorInfo(handler);
-        if (eventprocessorInfo == null)
+        final EventProcessorInfo<T> eventProcessorInfo = getEventProcessorInfo(handler);
+        if (eventProcessorInfo == null)
         {
             throw new IllegalArgumentException("The event handler " + handler + " is not processing events.");
         }
 
-        return eventprocessorInfo.getEventProcessor();
+        return eventProcessorInfo.getEventProcessor();
     }
 
     public Sequence getSequenceFor(final EventHandler<T> handler)
