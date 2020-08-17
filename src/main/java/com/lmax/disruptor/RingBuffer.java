@@ -439,6 +439,7 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
     /**
      * The size of the buffer.
      */
+    @Override
     public int getBufferSize()
     {
         return bufferSize;
@@ -454,6 +455,7 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
      * @return <tt>true</tt> If the specified <tt>requiredCapacity</tt> is available
      * <tt>false</tt> if not.
      */
+    @Override
     public boolean hasAvailableCapacity(int requiredCapacity)
     {
         return sequencer.hasAvailableCapacity(requiredCapacity);
@@ -897,6 +899,7 @@ public final class RingBuffer<E> extends RingBufferFields<E> implements Cursored
      *
      * @return The number of slots remaining.
      */
+    @Override
     public long remainingCapacity()
     {
         return sequencer.remainingCapacity();
