@@ -2,9 +2,7 @@
  * Baijiahulian.com Inc. Copyright (c) 2014-2019 All Rights Reserved.
  */
 
-package com.example.height.multi;
-
-import java.util.concurrent.atomic.AtomicInteger;
+package com.example.demo.height.multi;
 
 /**
  * @author Kongjianfu
